@@ -6,7 +6,7 @@ import Container from "@/components/Container.tsx";
 export default function Navbar() {
 
     return (
-        <nav className="absolute w-full">
+        <nav className="fixed top-0 left-0 right-0 bg-background z-50 ">
             <Container>
                 <div className="flex justify-between py-5">
                     <div className="flex items-center">
