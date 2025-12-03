@@ -19,9 +19,12 @@ export default function Navbar() {
                             Policy
                         </div>
                         <div className="h-5 w-[1px] bg-gray-200"></div>
-                        <Button className="flex items-center gap-2">
-                            <Github size="18"/>
-                        </Button>
+                        <a href="https://github.com/BurungKu" target="_blank">
+                            <Button className="flex items-center gap-2">
+                                <Github size="18"/>
+                            </Button>
+                        </a>
+
                     </div>
                 </div>
             </Container>
