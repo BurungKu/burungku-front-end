@@ -1,5 +1,6 @@
 import Navbar from "@/components/Navbar.tsx";
 import Container from "@/components/Container.tsx";
+import Footer from "@/components/Footer.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {AudioLines, ImageUp} from "lucide-react";
 import Rangkong from "@/assets/BurungKuLogo.svg"
@@ -8,7 +9,7 @@ import KakaTua from "@/assets/BurungKakaTua.svg"
 export default function App() {
 
     return (
-        <div className="relative min-h-dvh w-full">
+        <div className="relative min-h-dvh w-full flex flex-col">
             <Navbar/>
 
             <Container>
@@ -46,6 +47,8 @@ export default function App() {
                     </div>
                 </div>
             </Container>
+
+            <Footer isAbsolute={true}/>
         </div>
 
     )
