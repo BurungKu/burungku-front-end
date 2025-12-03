@@ -2,14 +2,17 @@ import {Github} from "lucide-react";
 import logo from "@/assets/BurungKuLogo.svg";
 import {Button} from "@/components/ui/button.tsx";
 import Container from "@/components/Container.tsx";
+import {useNavigate} from "react-router-dom";
 
 export default function Navbar() {
+    const navigate = useNavigate()
 
     return (
         <nav className="fixed top-0 left-0 right-0 bg-background z-50 ">
             <Container>
                 <div className="flex justify-between py-5">
-                    <div className="flex items-center">
+                    <div className="flex items-center"
+                         onClick={() => navigate("/")}>
                         <img src={logo} alt="Logo" className="w-14 h-14"/>
                         <span>Burung<span className="font-bold text-theme-orange">Ku.</span></span>
                     </div>
