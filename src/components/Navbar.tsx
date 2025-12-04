@@ -11,7 +11,7 @@ export default function Navbar() {
         <nav className="fixed top-0 left-0 right-0 bg-background z-50 ">
             <Container>
                 <div className="flex justify-between py-5">
-                    <div className="flex items-center"
+                    <div className="flex items-center cursor-pointer"
                          onClick={() => navigate("/")}>
                         <img src={logo} alt="Logo" className="w-14 h-14"/>
                         <span>Burung<span className="font-bold text-theme-orange">Ku.</span></span>
