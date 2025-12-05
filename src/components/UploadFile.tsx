@@ -134,7 +134,7 @@ export default function UploadFile({type, onUpload, isAnalyzing}: UploadAreaProp
     return (
         <div
             className={cn(
-                "relative border-2 border-dashed border-theme-orange rounded-xl p-12 transition-all duration-300",
+                "relative border-2 border-dashed border-theme-orange rounded-xl p-12 transition-all duration-300 w-full md:w-[30rem]",
                 isDragging ? "border-theme-orange bg-theme-orange/5 scale-105" : "border-border hover:border-theme-orange/50",
                 isAnalyzing && "pointer-events-none opacity-50"
             )}
