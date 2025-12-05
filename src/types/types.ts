@@ -1,0 +1,1 @@
+export type IucnType = "EX" | "EW" | "CR" | "EN" | "VU" | "NT" | "LC"
