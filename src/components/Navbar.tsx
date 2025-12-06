@@ -18,8 +18,9 @@ export default function Navbar() {
                     </div>
 
                     <div className="flex items-center gap-3">
-                        <div className="">
-                            Policy
+                        <div className="cursor-pointer hover:text-theme-orange transition-colors"
+                             onClick={() => navigate("/policy")}>
+                            Kebijakan
                         </div>
                         <div className="h-5 w-[1px] bg-gray-200"></div>
                         <a href="https://github.com/BurungKu" target="_blank">
