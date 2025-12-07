@@ -2,12 +2,12 @@ import Navbar from "@/components/Navbar.tsx";
 import Container from "@/components/Container.tsx";
 import Rangkong from "@/assets/BurungKuLogo.svg";
 import Footer from "@/components/Footer.tsx";
-import UploadFile from "@/components/UploadFile.tsx";
+import {UploadFile} from "@/components/UploadFile.tsx";
 import {useMutation} from "@tanstack/react-query";
 import axiosInstance from "@/lib/axios.ts";
 import ResultCard from "@/components/ResultCard.tsx";
 import {useState} from "react";
-import type {ResultData} from "@/types/types.ts";
+import type {ResultData, ResultDataAudio} from "@/types/types.ts";
 import AlertComponent from "@/components/Alert.tsx";
 
 export default function AnalyzePage() {
@@ -15,6 +15,10 @@ export default function AnalyzePage() {
         species: "",
         score: 0,
         iucn: null,
+    })
+    const [resultAudio, setResultAudio] = useState<ResultDataAudio>({
+        species: "",
+        predicted_simple_type: null
     })
     const [resultIdenticSpecies, setResultIdenticSpecies] = useState<ResultData[]>([])
     const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null)
@@ -59,11 +63,16 @@ export default function AnalyzePage() {
             formData.append("audio_file", fileToUpload);
             formData.append("species", resultImage.species);
 
+            console.log(fileToUpload)
+
             const response = await axiosInstance.post("/predict_audio", formData);
             return response.data;
         },
         onSuccess: (data) => {
-            console.log(data)
+            setResultAudio({
+                species: data.species,
+                predicted_simple_type: data.predicted_simple_type
+            })
         },
         onError: (error) => {
             console.error("Error: ", error)
@@ -73,6 +82,10 @@ export default function AnalyzePage() {
     const handleFileUploadImage = (uploadedFile: File) => {
         setShowAlert(false)
         setShowAnalyzeAudio(false)
+        setResultAudio({
+            species: "",
+            predicted_simple_type: null
+        })
         analyzeImage(uploadedFile)
     };
 
@@ -117,7 +130,8 @@ export default function AnalyzePage() {
                                     onUpload={handleFileUploadAudio}
                                     isAnalyzing={isPendingAnaylzeAudio}
                                 />
-                                {/*<ResultCard result="" type="audio" />*/}
+                                <ResultCard resultAudio={resultAudio}
+                                            type="audio" />
                             </div>
                         )}
                     </div>

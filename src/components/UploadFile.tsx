@@ -1,7 +1,7 @@
 import {useState, useRef} from "react";
 import {Upload, Loader2, Mic, Camera} from "lucide-react";
 import {Button} from "@/components/ui/button";
-import {cn} from "@/lib/utils";
+import {cn, convertToWav} from "@/lib/utils";
 import {toast} from "sonner";
 
 interface UploadAreaProps {
@@ -10,7 +10,7 @@ interface UploadAreaProps {
     isAnalyzing: boolean;
 }
 
-export default function UploadFile({type, onUpload, isAnalyzing}: UploadAreaProps) {
+export function UploadFile({type, onUpload, isAnalyzing}: UploadAreaProps) {
     const [isDragging, setIsDragging] = useState(false);
     const [showOptions, setShowOptions] = useState(false);
     const [isRecording, setIsRecording] = useState(false);
@@ -98,24 +98,29 @@ export default function UploadFile({type, onUpload, isAnalyzing}: UploadAreaProp
 
     const handleRecordAudio = async () => {
         setShowOptions(false);
-
         try {
             const stream = await navigator.mediaDevices.getUserMedia({audio: true});
-
             const mediaRecorder = new MediaRecorder(stream);
             mediaRecorderRef.current = mediaRecorder;
 
             const chunks: BlobPart[] = [];
 
             mediaRecorder.ondataavailable = (e) => chunks.push(e.data);
+            mediaRecorder.onstop = async () => {
+                const audioBlob = new Blob(chunks, {type: mediaRecorder.mimeType});
 
-            mediaRecorder.onstop = () => {
-                const audioBlob = new Blob(chunks, {type: "audio/webm"});
-                const audioFile = new File([audioBlob], "recorded_audio.webm", {
-                    type: "audio/webm",
-                });
+                // Convert to WAV
+                try {
+                    const wavBlob = await convertToWav(audioBlob);
+                    const audioFile = new File([wavBlob], "recorded_audio.wav", {
+                        type: "audio/wav",
+                    });
+                    onUpload(audioFile);
+                } catch (error) {
+                    console.error("Error converting audio:", error);
+                    toast.error("Gagal mengkonversi audio");
+                }
 
-                onUpload(audioFile);
                 fileInputDeviceRef.current!.value = "";
                 stream.getTracks().forEach(track => track.stop());
                 setIsRecording(false);
@@ -163,7 +168,7 @@ export default function UploadFile({type, onUpload, isAnalyzing}: UploadAreaProp
             <input
                 ref={fileInputDeviceRef}
                 type="file"
-                accept={type === "image" ? "image/*" : "audio/*"}
+                accept={type === "image" ? "image/*" : "audio/mp3, audio/wav, .mp3, .wav"}
                 className="hidden"
                 onChange={handleFileSelect}
             />
