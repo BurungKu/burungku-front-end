@@ -7,11 +7,20 @@ import {useMutation} from "@tanstack/react-query";
 import axiosInstance from "@/lib/axios.ts";
 import ResultCard from "@/components/ResultCard.tsx";
 import {useState} from "react";
-import type {IucnType} from "@/types/types.ts";
+import type {ResultData} from "@/types/types.ts";
 import AlertComponent from "@/components/Alert.tsx";
 
 export default function AnalyzePage() {
-    const [iucnData, setIucnData] = useState<IucnType | null>(null)
+    const [resultImage, setResultImage] = useState<ResultData>({
+        species: "",
+        score: 0,
+        iucn: null,
+    })
+    const [resultIdenticSpecies, setResultIdenticSpecies] = useState<ResultData[]>([])
+    const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null)
+    const [showAnalyzeAudio, setShowAnalyzeAudio] = useState<boolean>(false);
+    const [showAlert, setShowAlert] = useState<boolean>(false);
+
 
     const {mutate: analyzeImage, isPending: isPendingAnaylzeImage} = useMutation({
         mutationFn: async (fileToUpload: File) => {
@@ -21,19 +30,54 @@ export default function AnalyzePage() {
             formData.append("file", fileToUpload);
 
             const response = await axiosInstance.post("/predict", formData);
-            return response.data;
+            return {data: response.data, file: fileToUpload}
         },
-        onSuccess: (data) => {
-            console.log(data)
-            setIucnData(data.iucn)
+        onSuccess: ({data, file}) => {
+            setResultImage({
+                species: data.top1.species,
+                score: data.top1.score,
+                iucn: data.top1.iucn
+            })
+
+            setResultIdenticSpecies(data.topk)
+            setShowAlert(true)
+            setShowAnalyzeAudio(false)
+
+            const imageUrl = URL.createObjectURL(file);
+            setUploadedImageUrl(imageUrl);
         },
         onError: (error) => {
             console.error("Error: ", error)
         },
     })
 
-    const handleFileUpload = (uploadedFile: File) => {
-        analyzeImage(uploadedFile);
+    const {mutate: analyzeAudio, isPending: isPendingAnaylzeAudio} = useMutation({
+        mutationFn: async (fileToUpload: File) => {
+            if (!fileToUpload) throw new Error("Audio belum dipilih");
+
+            const formData = new FormData();
+            formData.append("audio_file", fileToUpload);
+            formData.append("species", resultImage.species);
+
+            const response = await axiosInstance.post("/predict_audio", formData);
+            return response.data;
+        },
+        onSuccess: (data) => {
+            console.log(data)
+        },
+        onError: (error) => {
+            console.error("Error: ", error)
+        },
+    })
+
+    const handleFileUploadImage = (uploadedFile: File) => {
+        setShowAlert(false)
+        setShowAnalyzeAudio(false)
+        analyzeImage(uploadedFile)
+    };
+
+    const handleFileUploadAudio = (uploadedFile: File) => {
+        analyzeAudio(uploadedFile);
     };
 
     return (
@@ -49,12 +93,33 @@ export default function AnalyzePage() {
                     <div className="w-full mt-2 flex flex-col gap-3">
                         <div className="flex flex-col md:flex-row gap-3">
                             <UploadFile type="image"
-                                        onUpload={handleFileUpload}
+                                        onUpload={handleFileUploadImage}
                                         isAnalyzing={isPendingAnaylzeImage}
                             />
-                            <ResultCard result=""/>
+                            <ResultCard result={resultImage}
+                                        identicSpecies={resultIdenticSpecies}
+                                        type="image"
+                                        imageUrl={uploadedImageUrl}/>
                         </div>
-                        <AlertComponent iucn="EX"/>
+                        {showAlert && resultImage?.iucn && resultImage.score >= 30 && (
+                            <AlertComponent
+                                iucn={resultImage.iucn}
+                                onYes={() => {
+                                    setShowAnalyzeAudio(true);
+                                }}
+                            />
+                        )}
+
+                        {showAnalyzeAudio && (
+                            <div className="flex flex-col md:flex-row gap-3">
+                                <UploadFile
+                                    type="audio"
+                                    onUpload={handleFileUploadAudio}
+                                    isAnalyzing={isPendingAnaylzeAudio}
+                                />
+                                <ResultCard result="" type="audio" />
+                            </div>
+                        )}
                     </div>
                 </div>
             </Container>

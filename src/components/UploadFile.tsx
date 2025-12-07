@@ -26,6 +26,8 @@ export default function UploadFile({type, onUpload, isAnalyzing}: UploadAreaProp
         const file = e.target.files?.[0];
         if (file) {
             onUpload(file);
+
+            e.target.value = "";
         }
     };
 
@@ -75,6 +77,7 @@ export default function UploadFile({type, onUpload, isAnalyzing}: UploadAreaProp
                     });
                     handleCloseCamera();
                     onUpload(file);
+                    fileInputDeviceRef.current!.value = "";
                 } else {
                     console.error("Failed to create blob");
                 }
@@ -113,6 +116,7 @@ export default function UploadFile({type, onUpload, isAnalyzing}: UploadAreaProp
                 });
 
                 onUpload(audioFile);
+                fileInputDeviceRef.current!.value = "";
                 stream.getTracks().forEach(track => track.stop());
                 setIsRecording(false);
             };
@@ -147,7 +151,13 @@ export default function UploadFile({type, onUpload, isAnalyzing}: UploadAreaProp
                 e.preventDefault();
                 setIsDragging(false);
                 const file = e.dataTransfer.files[0];
-                if (file) onUpload(file);
+                if (file) {
+                    onUpload(file);
+
+                    if (fileInputDeviceRef.current) {
+                        fileInputDeviceRef.current.value = "";
+                    }
+                }
             }}
         >
             <input
@@ -159,7 +169,7 @@ export default function UploadFile({type, onUpload, isAnalyzing}: UploadAreaProp
             />
 
             {showOptions && (
-                <div className="absolute inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
+                <div className="absolute inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-[999]">
                     <div className="bg-white rounded-xl p-6 w-64 shadow-xl flex flex-col gap-4">
                         <h3 className="text-lg font-semibold text-center">Pilih Sumber</h3>
 
@@ -228,7 +238,7 @@ export default function UploadFile({type, onUpload, isAnalyzing}: UploadAreaProp
             </div>
 
             {isCameraOpen && (
-                <div className="fixed inset-0 bg-black/90 backdrop-blur-sm flex items-center justify-center z-50">
+                <div className="fixed inset-0 bg-black/90 backdrop-blur-sm flex items-center justify-center z-[999]">
                     <div className="bg-white rounded-xl p-6 max-w-2xl w-full mx-4 shadow-xl">
                         <h3 className="text-lg font-semibold text-center mb-4">Ambil Foto</h3>
 
