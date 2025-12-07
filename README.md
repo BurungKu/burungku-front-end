@@ -30,7 +30,7 @@
 4. Isi file .env:
     ```sh
     VITE_BACK_END_URL=YOUR_BACK_END_URL   # Isi dengan url Heroku yang sudah dideploy
-    VITE_STATIC_API_KEY=YOUR_API_KEY      # Isi dengan API KEY yang didapat pada Config Pars Heroku
+    VITE_STATIC_API_KEY=YOUR_API_KEY      # Isi dengan API KEY yang didapat pada Config Vars Heroku
     ```
     Catatan: Pastikan API_KEY mempunyai value yang sama antara front-end dan back-end
 5. Build & jalankan project
