@@ -117,7 +117,7 @@ export default function AnalyzePage() {
                                     onUpload={handleFileUploadAudio}
                                     isAnalyzing={isPendingAnaylzeAudio}
                                 />
-                                <ResultCard result="" type="audio" />
+                                {/*<ResultCard result="" type="audio" />*/}
                             </div>
                         )}
                     </div>
