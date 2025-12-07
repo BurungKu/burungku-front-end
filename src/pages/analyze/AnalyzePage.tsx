@@ -63,8 +63,6 @@ export default function AnalyzePage() {
             formData.append("audio_file", fileToUpload);
             formData.append("species", resultImage.species);
 
-            console.log(fileToUpload)
-
             const response = await axiosInstance.post("/predict_audio", formData);
             return response.data;
         },

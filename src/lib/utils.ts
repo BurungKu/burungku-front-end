@@ -18,6 +18,7 @@ export function indicatorColor(value: number) {
             return "text-red-500";
     }
 }
+
 export function getIucnInfo(
     iucn: IucnType
 ) {

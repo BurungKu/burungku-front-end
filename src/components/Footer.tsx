@@ -1,10 +1,10 @@
 import {cn} from "@/lib/utils";
 import Container from "@/components/Container.tsx";
 
-type FooterProps = {
-    isAbsolute?: boolean;
-    customClass?: string;
-};
+interface FooterProps {
+    isAbsolute?: boolean
+    customClass?: string
+}
 
 export default function Footer({isAbsolute = false, customClass}: FooterProps) {
 
