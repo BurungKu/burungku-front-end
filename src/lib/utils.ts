@@ -30,20 +30,25 @@ export function getIucnInfo(
                 variant: "destructive" as const
             }
 
-        case "CR":
-        case "EN":
         case "VU":
             return {
                 title: "Dilindungi",
-                description: "Spesies ini termasuk satwa yang dilindungi dan tidak boleh diperjualbelikan",
+                description: "Spesies ini termasuk satwa yang dilindungi, hanya boleh ditemui atau dipelihara di penangkaran",
+            }
+
+        case "CR":
+        case "EN":
+        case "NT":
+            return {
+                title: "Dilindungi",
+                description: "Spesies ini termasuk satwa yang dilindungi, diperlukan surat bukti captive breed dan surat kesehatan",
                 variant: "warning" as const
             }
 
-        case "NT":
         case "LC":
             return {
-                title: "Aman diperjualbelikan",
-                description: "Spesies ini tidak termasuk kategori dilindungi dan boleh diperjualbelikan",
+                title: "Aman diperjualbelikan bebas",
+                description: "Spesies ini boleh diperjualbelikan bebas dengan ketentuan yang berlaku",
                 variant: "success" as const
             }
 
