@@ -46,13 +46,7 @@ export default function ResultCard({result, resultAudio, type, imageUrl, identic
                     </div>
                 )}
 
-                {(result?.species && result.score <= 30) &&
-                    <div className="w-full h-full flex justify-center items-center">
-                        <span className="text-gray-500">Data tidak ditemukan</span>
-                    </div>
-                }
-
-                {(result?.species && result.score >= 30) &&
+                {(result?.species) &&
                     <div>
                         <h1 className="text-lg md:text-2xl font-bold">{result?.species}</h1>
                         <span className={`italic text-sm md:text-md font-semibold ${indicatorColor(result?.score)}`}>
@@ -64,7 +58,6 @@ export default function ResultCard({result, resultAudio, type, imageUrl, identic
 
                 {type === "image" &&
                     result?.species &&
-                    result.score >= 30 &&
                     identicSpecies &&
                     identicSpecies.length > 0 && (
                         <div className="flex flex-col gap-3">
