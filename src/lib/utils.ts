@@ -72,7 +72,7 @@ export function getAudioInfo(audioType: PredictedAudioType | null | undefined) {
         case "alarm":
             return {
                 description:
-                    "Sebuah seruan peringatan yang muncul ketika burung merasakan ancaman, seperti kehadiran predator atau situasi berbahaya lainnya. Suaranya cenderung pendek, tajam, repetitif, dan terdengar panik. Tujuannya adalah memperingatkan burung lain agar lebih waspada, menyelamatkan diri, atau mengelabui predator.",
+                    "Sebuah seruan peringatan yang muncul ketika burung merasakan stress atau ancaman, seperti kehadiran predator atau situasi berbahaya lainnya. Suaranya cenderung pendek, tajam, repetitif, dan terdengar panik. Tujuannya adalah memperingatkan burung lain agar lebih waspada, menyelamatkan diri, atau mengelabui predator.",
             }
 
         case "flight_call":
