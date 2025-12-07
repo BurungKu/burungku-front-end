@@ -8,7 +8,7 @@ export default function Navbar() {
     const navigate = useNavigate()
 
     return (
-        <nav className="fixed top-0 left-0 right-0 bg-background z-50 ">
+        <nav className="fixed top-0 left-0 right-0 bg-background z-[998]">
             <Container>
                 <div className="flex justify-between py-5">
                     <div className="flex items-center cursor-pointer"
